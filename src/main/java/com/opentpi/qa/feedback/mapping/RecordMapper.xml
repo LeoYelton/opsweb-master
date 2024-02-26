@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.opentpi.qa.feedback.dao.RecordMapper">
+    <resultMap id="BaseResultMap" type="com.opentpi.qa.feedback.model.Record">
+        <result column="data_id" jdbcType="INTEGER" property="dataId"/>
+        <result column="task_id" jdbcType="INTEGER" property="taskId"/>
+        <result column="task_state" jdbcType="INTEGER" property="taskState"/>
+        <result column="branch_id" jdbcType="INTEGER" property="branchId"/>
+        <result column="recordor" jdbcType="VARCHAR" property="recordor"/>
+        <result column="join_user" jdbcType="VARCHAR" property="joinUser"/>
+        <result column="result_type" jdbcType="INTEGER" property="resultType"/>
+        <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="result" jdbcType="VARCHAR" property="result"/>
+        <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+        <result column="record_time" jdbcType="VARCHAR" property="recordTime"/>
+    </resultMap>
+	<delete id="delRecord" parameterType="java.lang.String">
+		delete from fd_record where data_id = ${dataId}
+	</delete>
+	<insert id="addRecord" parameterType="com.opentpi.qa.feedback.model.Record" useGeneratedKeys="true" keyProperty="dataId">
+		insert into fd_record
+		(
+			`task_id`, 
+			`task_state`, 
+			`branch_id`, 
+			`recordor`, 
+			`join_user`, 
+			`result_type`, 
+			`file_name`, 
+			`tel`, 
+			`result`, 
+			`create_time`, 
+			`record_time`
+		)
+		values
+		(
+			#{taskId}, 
+			#{taskState}, 
+			#{branchId}, 
+			#{recordor}, 
+			#{joinUser}, 
+			#{resultType}, 
+			#{fileName}, 
+			#{tel}, 
+			#{result}, 
+			#{createTime}, 
+			#{recordTime}
+		)
+	</insert>
+	<update id="updateRecord" parameterType="com.opentpi.qa.feedback.model.Record">
+		update fd_record 
+		set
+			`task_id` = #{taskId}, 
+			`task_state` = #{taskState}, 
+			`branch_id` = #{branchId}, 
+			`recordor` = #{recordor}, 
+			`join_user` = #{joinUser}, 
+			`result_type` = #{resultType}, 
+			`file_name` = #{fileName}, 
+			`tel` = #{tel}, 
+			`result` = #{result}, 
+			`create_time` = #{createTime}, 
+			`record_time` = #{recordTime}
+		where data_id = #{dataId}
+	</update>
+	<select id="getRecord" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * from fd_record where data_id = #{dataId}
+	</select>
+	<select id="listByParam" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * from fd_record
+        where 1=1
+		<if test="dataId != null">
+			and `data_id` = #{dataId}
+		</if>
+		<if test="taskId != null">
+			and `task_id` = #{taskId}
+		</if>
+		<if test="taskState != '' and taskState != null">
+			and `task_state` = #{taskState}
+		</if>
+		<if test="branchId != '' and branchId != null">
+			and `branch_id` = #{branchId}
+		</if>
+		<if test="recordor != '' and recordor != null">
+			and `recordor` = #{recordor}
+		</if>
+		<if test="joinUser != '' and joinUser != null">
+			and `join_user` = #{joinUser}
+		</if>
+		<if test="resultType != '' and resultType != null">
+			and `result_type` = #{resultType}
+		</if>
+		<if test="fileName != '' and fileName != null">
+			and `file_name` = #{fileName}
+		</if>
+		<if test="tel != '' and tel != null">
+			and `tel` = #{tel}
+		</if>
+		<if test="result != '' and result != null">
+			and `result` = #{result}
+		</if>
+		<if test="createTime != '' and createTime != null">
+			and `create_time` = #{createTime}
+		</if>
+		<if test="recordTime != '' and recordTime != null">
+			and `record_time` = #{recordTime}
+		</if>
+	</select>
+</mapper>

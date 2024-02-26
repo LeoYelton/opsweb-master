@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SynopsysCodeSightSettings">
+    <option name="SASTColumnStates">
+      <list>
+        <ColumnState>
+          <option name="name" value="" />
+          <option name="width" value="35" />
+        </ColumnState>
+        <ColumnState>
+          <option name="name" value="Type" />
+          <option name="width" value="512" />
+        </ColumnState>
+        <ColumnState>
+          <option name="name" value="Location" />
+          <option name="width" value="512" />
+        </ColumnState>
+        <ColumnState>
+          <option name="name" value="First Detected" />
+          <option name="width" value="463" />
+        </ColumnState>
+        <ColumnState>
+          <option name="name" value="Dismissed" />
+          <option name="width" value="161" />
+        </ColumnState>
+      </list>
+    </option>
+    <option name="SASTIssuesViewAutoScope" value="Dismissed" />
+    <option name="version" value="3" />
+  </component>
+</project>

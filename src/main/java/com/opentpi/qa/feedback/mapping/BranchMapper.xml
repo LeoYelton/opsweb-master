@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.opentpi.qa.feedback.dao.BranchMapper">
+    <resultMap id="BaseResultMap" type="com.opentpi.qa.feedback.model.Branch">
+        <result column="branch_no" jdbcType="INTEGER" property="branchNo"/>
+        <result column="branch_name" jdbcType="VARCHAR" property="branchName"/>
+        <result column="password" jdbcType="INTEGER" property="password"/>
+        <result column="branch_company" jdbcType="INTEGER" property="branchCompany"/>
+        <result column="first_branch" jdbcType="INTEGER" property="firstBranch"/>
+        <result column="branch_type" jdbcType="VARCHAR" property="branchType"/>
+        <result column="branch_level" jdbcType="VARCHAR" property="branchLevel"/>
+        <result column="notice_user" jdbcType="VARCHAR" property="noticeUser"/>
+        <result column="notice_tel" jdbcType="VARCHAR" property="noticeTel"/>
+    </resultMap>
+	<delete id="delBranch" parameterType="java.lang.Integer">
+		delete from fd_branch where branch_no = #{branchNo}
+	</delete>
+	<insert id="addBranch" parameterType="com.opentpi.qa.feedback.model.Branch" useGeneratedKeys="true" keyProperty="branchNo">
+		insert into fd_branch
+		(
+			`branch_name`, 
+			`password`, 
+			`branch_company`, 
+			`first_branch`, 
+			`branch_type`, 
+			`branch_level`, 
+			`notice_user`, 
+			`notice_tel`
+		)
+		values
+		(
+			#{branchName}, 
+			#{password}, 
+			#{branchCompany}, 
+			#{firstBranch}, 
+			#{branchType}, 
+			#{branchLevel}, 
+			#{noticeUser}, 
+			#{noticeTel}
+		)
+	</insert>
+	<update id="updateBranch" parameterType="com.opentpi.qa.feedback.model.Branch">
+		update fd_branch 
+		set
+			`branch_name` = #{branchName}, 
+			`password` = #{password}, 
+			`branch_company` = #{branchCompany}, 
+			`first_branch` = #{firstBranch}, 
+			`branch_type` = #{branchType}, 
+			`branch_level` = #{branchLevel}, 
+			`notice_user` = #{noticeUser}, 
+			`notice_tel` = #{noticeTel}
+		where branch_no = #{branchNo}
+	</update>
+	<select id="getBranch" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select * from fd_branch where branch_no = ${branchNo}
+	</select>
+	<select id="listByParam" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * from fd_branch
+        where 1=1
+		<if test="branchNo != null">
+			and `branch_no` = #{branchNo}
+		</if>
+		<if test="branchName != '' and branchName != null">
+			and `branch_name` = #{branchName}
+		</if>
+		<if test="password != '' and password != null">
+			and `password` = #{password}
+		</if>
+		<if test="branchCompany != '' and branchCompany != null">
+			and `branch_company` = #{branchCompany}
+		</if>
+		<if test="firstBranch != '' and firstBranch != null">
+			and `first_branch` = #{firstBranch}
+		</if>
+		<if test="branchType != '' and branchType != null">
+			and `branch_type` = #{branchType}
+		</if>
+		<if test="branchLevel != '' and branchLevel != null">
+			and `branch_level` = #{branchLevel}
+		</if>
+		<if test="noticeUser != '' and noticeUser != null">
+			and `notice_user` = #{noticeUser}
+		</if>
+		<if test="noticeTel != '' and noticeTel != null">
+			and `notice_tel` = #{noticeTel}
+		</if>
+	</select>
+	<select id="login" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * from fd_branch where branch_no = #{branchNo} and password = #{password}
+	</select>
+</mapper>

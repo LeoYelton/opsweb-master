@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.opentpi.qa.feedback.dao.FeedBackTaskMapper">
+    <resultMap id="BaseResultMap" type="com.opentpi.qa.feedback.model.FeedBackTask">
+        <result column="data_id" jdbcType="INTEGER" property="dataId"/>
+        <result column="task_name" jdbcType="VARCHAR" property="taskName"/>
+        <result column="test_date" jdbcType="VARCHAR" property="testDate"/>
+        <result column="record_state" jdbcType="TINYINT" property="recordState"/>
+        <result column="task_state" jdbcType="INTEGER" property="taskState"/>
+        <result column="file_code" jdbcType="VARCHAR" property="fileCode"/>
+        <result column="issue_date" jdbcType="VARCHAR" property="issueDate"/>
+        <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+        <result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+    </resultMap>
+	
+	<select id="getTask" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * from fd_task where data_id = #{dataId}
+	</select>
+	
+</mapper>

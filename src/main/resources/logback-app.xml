@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 从高到地低 OFF 、 FATAL 、 ERROR 、 WARN 、 INFO 、 DEBUG 、 TRACE 、 ALL -->
+<!-- 日志输出规则  根据当前ROOT 级别，日志输出时，级别高于root默认的级别时  会输出 -->
+<!-- 以下  每个配置的 filter 是过滤掉输出文件里面，会出现高级别文件，依然出现低级别的日志信息，通过filter 过滤只记录本级别的日志-->
+
+
+<!-- 属性描述 scan：性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
+    debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+   <!--  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+ -->
+    <springProperty scope="context" name="uidPrefix" source="info.app.uid" value="base" /> 
+    <springProperty scope="context" name="logPath"   source="opentpi.devops.logpath"  />
+    <springProperty scope="context" name="logLevel"  source="log.level" />
+    <!-- 定义日志文件 输入位置 -->
+    
+    <!-- 日志最大的历史 30天 -->
+    <property name="maxHistory" value="60"/>
+ 
+    <!-- ConsoleAppender 控制台输出日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 对日志进行格式化 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger -%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 RollingFileAppender-->
+    <appender name="bizlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+ 
+        <!-- 最常用的滚动策略，它根据时间来制定滚动策略.既负责滚动也负责出发滚动 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志输出位置  可相对、和绝对路径 -->
+            <fileNamePattern>${logPath}/${uidPrefix}_biz-log-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件假设设置每个月滚动，且<maxHistory>是6，
+                                           则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除-->
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+
+        <!-- 按照固定窗口模式生成日志文件，当文件大于20MB时，生成新的日志文件。窗口大小是1到3，当保存了3个归档文件后，将覆盖最早的日志。
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+          <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/.log.zip</fileNamePattern>
+          <minIndex>1</minIndex>
+          <maxIndex>3</maxIndex>
+        </rollingPolicy>   -->
+        <!-- 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动 -->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>  
+
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    
+     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/${uidPrefix}_logFile-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- ERROR级别日志 -->
+    <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 RollingFileAppender-->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤器，只记录WARN级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 最常用的滚动策略，它根据时间来制定滚动策略.既负责滚动也负责出发滚动 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志输出位置  可相对、和绝对路径 -->
+            <fileNamePattern>${logPath}/${uidPrefix}_errorlog-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件假设设置每个月滚动，且<maxHistory>是6，
+                                           则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除-->
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+
+        <!-- 按照固定窗口模式生成日志文件，当文件大于20MB时，生成新的日志文件。窗口大小是1到3，当保存了3个归档文件后，将覆盖最早的日志。
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+          <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/.log.zip</fileNamePattern>
+          <minIndex>1</minIndex>
+          <maxIndex>3</maxIndex>
+        </rollingPolicy>   -->
+        <!-- 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>   -->
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <appender-ref ref="FILE"/>
+    </appender>
+    
+        <!-- ConsoleAppender 控制台输出日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 对日志进行格式化 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger -%msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- 
+    <logger name="javax.activation" level="WARN"/>
+    <logger name="javax.mail" level="WARN"/>
+    <logger name="javax.xml.bind" level="WARN"/>
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="com.codahale.metrics" level="WARN"/>
+    <logger name="com.hazelcast" level="INFO"/>
+    <logger name="com.ryantenney" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
+    <logger name="com.zaxxer" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+    <logger name="org.bson" level="WARN"/>
+    <logger name="org.hibernate.validator" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+  
+    <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="org.xnio" level="WARN"/>
+    <logger name="springfox" level="WARN"/>
+   
+    <logger name="liquibase" level="WARN"/>
+    <logger name="LiquibaseSchemaResolver" level="INFO"/>
+    <logger name="sun.net.www" level="INFO"/>
+    <logger name="sun.rmi.transport" level="WARN"/> 
+    -->
+    
+    <logger name="sun.rmi" level="WARN"/>
+    <logger name="sun.net.www" level="INFO"/>
+    <logger name="sun.rmi.transport" level="WARN"/> 
+    <logger name="de.codecentric.boot" level="WARN"/> 
+   
+     
+    <logger name="springfox.documentation.swagger" level="WARN"/>
+    <logger name="springfox.documentation.spring" level="WARN"/>
+    <logger name="springfox.documentation.schema" level="WARN"/>
+    
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.core" level="WARN"/>
+    <logger name="org.springframework.context" level="WARN"/>
+    
+    <logger name="org.springframework.aop.framework" level="WARN"/>
+    <logger name="org.springframework.beans.factory" level="WARN"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springframework.web.context" level="WARN"/>
+    <logger name="org.springframework.security" level="INFO"/>
+    
+    <logger name="org.springframework.scheduling" level="WARN"/>
+    <logger name="org.springframework.integration" level="WARN"/>
+    
+    <logger name="org.springframework.cache" level="WARN"/>
+    <logger name="org.springframework.data.redis" level="INFO"/>
+    
+    
+    <logger name="org.springframework.session.data" level="INFO"/>
+   
+   
+    <logger name="org.springframework.boot.autoconfigure" level="INFO"/>
+    
+    <logger name="org.springframework.boot.actuate" level="INFO"/>
+    <logger name="org.springframework.boot.context.embedded" level="WARN"/>
+    <logger name="org.springframework.boot.web.filter" level="INFO"/>
+    
+    
+    <logger name="org.springframework.retry" level="INFO"/>
+    <logger name="org.hibernate.validator" level="WARN" />
+    
+    <logger name="org.apache.http" level="WARN"/>
+    <logger name="org.apache.catalina" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    
+    <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix.config" level="INFO"/>
+    <logger name="com.netflix.hystrix" level="INFO"/>
+    <logger name="com.netflix.discovery" level="INFO"/>
+    
+    <logger name="org.keycloak.adapters.springsecurity" level="WARN"/>
+    
+    
+    <!--
+    <logger name="dao" level="DEBUG" >
+       <appender-ref ref="daoFile" />
+    </logger> -->
+    
+    <logger name="java.sql.PreparedStatement" value="INFO" />
+    <logger name="java.sql.Connection" value="INFO" />
+    <logger name="java.sql.Statement" value="INFO" />
+    
+    <logger name="com.ibatis" value="INFO" >
+         <appender-ref ref="STDOUT" />
+    </logger>
+    
+     <logger name="java.sql" value="INFO" >
+         <appender-ref ref="STDOUT" />
+    </logger> 
+    
+    <logger name="com.ibatis.common.jdbc.SimpleDataSource" value="INFO" />
+    <logger name="com.ibatis.common.jdbc.ScriptRunner" level="INFO"/>
+    <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="ERROR" />
+    
+    <logger name="com.opentpi.kernel" level="DEBUG" additivity="true" />
+    
+    <logger name="com.opentpi.qa*" level="DEBUG" additivity="true" />
+    
+    <logger name="accessLog" level="ERROR" />
+    <logger name="serviceStatsLog" level="ERROR" />
+    <logger name="profile" level="ERROR" />
+    <logger name="error" level="ERROR" />
+    <logger name="warn" level="ERROR" />
+    <logger name="info" level="ERROR" />
+    <logger name="debug" level="ERROR" />
+    <logger name="trace" level="ERROR" />
+
+    <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+    
+     <root level="debug">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="bizlog" />
+     </root>
+
+</configuration>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="PDMPlugin">
+    <option name="customRuleSets">
+      <list>
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\naming.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\codesize.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\imports.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\migrating_to_15.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\unnecessary.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\j2ee.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\migrating_to_14.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\basic.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\controversial.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\empty.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\finalizers.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\migrating.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\clone.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\android.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\coupling.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\sunsecure.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\migrating_to_13.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\design.xml" />
+        <option value="F:\pmdRule\pmd\pmd-java\src\main\resources\rulesets\java\comments.xml" />
+      </list>
+    </option>
+    <option name="skipTestSources" value="false" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-19" project-jdk-type="JavaSDK" />
+</project>

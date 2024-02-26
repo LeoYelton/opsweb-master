@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.opentpi.qa.feedback.dao.UsersMapper">
+    <resultMap id="BaseResultMap" type="com.opentpi.qa.feedback.model.Users">
+        <result column="data_id" jdbcType="INTEGER" property="dataId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="password" jdbcType="INTEGER" property="password"/>
+    </resultMap>
+	<delete id="delUsers" parameterType="java.lang.Integer">
+		delete from fd_users where data_id = #{dataId}
+	</delete>
+	<insert id="addUsers" parameterType="com.opentpi.qa.feedback.model.Users" useGeneratedKeys="true" keyProperty="dataId">
+		insert into fd_users
+		(
+			`user_name`, 
+			`password`
+		)
+		values
+		(
+			#{userName}, 
+			#{password}
+		)
+	</insert>
+	<update id="updateUsers" parameterType="com.opentpi.qa.feedback.model.Users">
+		update fd_users 
+		set
+			`user_name` = #{userName}, 
+			`password` = #{password}
+		where data_id = #{dataId}
+	</update>
+	<select id="getUsers" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * from fd_users where data_id = #{dataId}
+	</select>
+	<select id="listByParam" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * from fd_users
+        where 1=1
+		<if test="dataId != null">
+			and `data_id` = #{dataId}
+		</if>
+		<if test="userName != '' and userName != null">
+			and `user_name` = #{userName}
+		</if>
+		<if test="password != '' and password != null">
+			and `password` = #{password}
+		</if>
+	</select>
+	<select id="login" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select * from fd_users where user_name = ${userName} and password = #{password}
+	</select>
+</mapper>
